@@ -1,0 +1,109 @@
+export const generateVoiData = (inputs) => {
+    const { decisionCost, outcomes, infoScenario } = inputs;
+
+    // --- Base Case (Without Information) ---
+    const emvDecision = outcomes.reduce((acc, outcome) => {
+        return acc + (outcome.probability / 100) * outcome.payoff;
+    }, 0) - decisionCost;
+
+    const emvNoDecision = 0;
+    const emvWithoutInfo = Math.max(emvDecision, emvNoDecision);
+    const optimalActionWithoutInfo = emvDecision > emvNoDecision ? inputs.decisionName : `Do Not ${inputs.decisionName}`;
+
+    // --- With Information ---
+    let emvWithInfoPreCost = 0;
+    const indicatorNodes = [];
+    const indicatorLinks = [];
+    let nodeCounter = 2; // 0: Initial, 1: Acquire, 2: No Acquire
+
+    infoScenario.indicators.forEach(indicator => {
+        const pIndicator = indicator.probability / 100;
+        
+        const emvDecisionGivenIndicator = indicator.conditionalProbabilities.reduce((acc, cp) => {
+            const outcome = outcomes.find(o => o.id === cp.outcomeId);
+            return acc + (cp.probability / 100) * outcome.payoff;
+        }, 0) - decisionCost;
+
+        const emvNoDecisionGivenIndicator = 0;
+        const emvForIndicator = Math.max(emvDecisionGivenIndicator, emvNoDecisionGivenIndicator);
+        
+        emvWithInfoPreCost += pIndicator * emvForIndicator;
+
+        // For Plotting
+        const indicatorNodeId = ++nodeCounter;
+        indicatorNodes.push({ 
+            id: indicatorNodeId,
+            label: `${indicator.name} (${indicator.probability}%)`, 
+            color: '#f97316', 
+            emv: emvForIndicator 
+        });
+        indicatorLinks.push({ 
+            source: 1, 
+            target: indicatorNodeId, 
+            value: pIndicator * emvWithInfoPreCost, 
+            label: `${indicator.name} (${indicator.probability}%)`, 
+            color: 'rgba(249, 115, 22, 0.6)' 
+        });
+
+        const decisionNodeId = ++nodeCounter;
+        const noDecisionNodeId = ++nodeCounter;
+        
+        const optimalPathNodeId = emvDecisionGivenIndicator > emvNoDecisionGivenIndicator ? decisionNodeId : noDecisionNodeId;
+        
+        indicatorNodes.push({ id: decisionNodeId, label: `${inputs.decisionName} (EMV $${emvDecisionGivenIndicator.toFixed(2)}M)`, color: '#10b981' });
+        indicatorNodes.push({ id: noDecisionNodeId, label: `Do Not ${inputs.decisionName} (EMV $0.00M)`, color: '#ef4444' });
+
+        indicatorLinks.push({ 
+            source: indicatorNodeId, 
+            target: optimalPathNodeId, 
+            value: pIndicator * emvWithInfoPreCost, 
+            label: emvDecisionGivenIndicator > emvNoDecisionGivenIndicator ? inputs.decisionName : `Do Not ${inputs.decisionName}`, 
+            color: emvDecisionGivenIndicator > emvNoDecisionGivenIndicator ? 'rgba(16, 185, 129, 0.6)' : 'rgba(239, 68, 68, 0.6)'
+        });
+    });
+
+    const emvWithInfo = emvWithInfoPreCost - infoScenario.cost;
+    const voi = emvWithInfoPreCost - emvWithoutInfo;
+    const netVoi = voi - infoScenario.cost;
+
+    // --- EVPI (Expected Value of Perfect Information) ---
+    const emvWithPerfectInfo = outcomes.reduce((acc, outcome) => {
+        const pOutcome = outcome.probability / 100;
+        const payoffAfterCost = outcome.payoff - decisionCost;
+        return acc + pOutcome * Math.max(payoffAfterCost, 0);
+    }, 0);
+    const evpi = emvWithPerfectInfo - emvWithoutInfo;
+
+    const kpis = {
+        emvWithInfo: emvWithInfo.toFixed(2),
+        emvWithoutInfo: emvWithoutInfo.toFixed(2),
+        voi: voi.toFixed(2),
+        netVoi: netVoi.toFixed(2),
+        evpi: evpi.toFixed(2),
+    };
+
+    const plotData = {
+        nodes: [
+            { id: 0, label: 'Initial Decision', color: '#3b82f6', emv: emvWithInfo },
+            { id: 1, label: `Acquire ${infoScenario.name}`, color: '#8b5cf6', emv: emvWithInfo },
+            { id: 2, label: 'Do Not Acquire', color: '#8b5cf6', emv: emvWithoutInfo },
+            ...indicatorNodes,
+            { id: ++nodeCounter, label: `${inputs.decisionName} (EMV $${emvDecision.toFixed(2)}M)`, color: '#10b981' },
+            { id: ++nodeCounter, label: `Do Not ${inputs.decisionName} (EMV $0.00M)`, color: '#ef4444' },
+        ],
+        links: [
+            ...indicatorLinks,
+            { source: 0, target: 1, value: emvWithInfo, label: `Acquire Info (Cost $${infoScenario.cost}M)`, color: 'rgba(139, 92, 246, 0.6)' },
+            { source: 0, target: 2, value: emvWithoutInfo, label: 'No Info', color: 'rgba(139, 92, 246, 0.4)' },
+            { source: 2, target: optimalActionWithoutInfo === inputs.decisionName ? nodeCounter -1 : nodeCounter, value: emvWithoutInfo, label: optimalActionWithoutInfo, color: optimalActionWithoutInfo === inputs.decisionName ? 'rgba(16, 185, 129, 0.4)' : 'rgba(239, 68, 68, 0.4)' },
+        ].map((link, i) => ({ ...link, id: i }))
+    };
+    
+    const insights = `The Expected Monetary Value (EMV) without new information is $${emvWithoutInfo.toFixed(2)}M, with the optimal decision being to '${optimalActionWithoutInfo}'. Acquiring the '${infoScenario.name}' for $${infoScenario.cost}M results in a final EMV of $${emvWithInfo.toFixed(2)}M. The gross Value of Information (VOI) is $${voi.toFixed(2)}M. After accounting for the cost, the Net VOI is $${netVoi.toFixed(2)}M. Since this is positive, acquiring the information is financially advantageous. The EVPI of $${evpi.toFixed(2)}M sets the theoretical maximum value of any information-gathering activity.`;
+
+    return {
+        kpis,
+        plotData,
+        insights,
+    };
+};

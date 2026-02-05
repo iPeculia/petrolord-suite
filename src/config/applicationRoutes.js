@@ -1,0 +1,51 @@
+/**
+ * Application Routes Configuration
+ * Defines which routes are considered "Applications" and their behavior.
+ */
+
+export const applicationRoutes = [
+  {
+    id: 'earth-model-pro',
+    path: '/dashboard/apps/geoscience/earth-model-pro',
+    name: 'EarthModel Pro',
+    icon: 'Globe',
+    description: 'Advanced 3D Geological Modeling',
+    hideSidebar: true,
+    fullscreen: true
+  },
+  {
+    id: 'subsurface-studio',
+    path: '/dashboard/apps/geoscience/subsurface-studio',
+    name: 'Subsurface Studio',
+    hideSidebar: true,
+    fullscreen: true
+  },
+  {
+    id: 'mechanical-earth-model',
+    path: '/dashboard/apps/geoscience/mechanical-earth-model',
+    name: 'Mechanical Earth Model',
+    hideSidebar: true,
+    fullscreen: true
+  },
+  {
+    id: 'basinflow-genesis',
+    path: '/dashboard/apps/geoscience/basinflow-genesis',
+    name: 'BasinFlow Genesis',
+    hideSidebar: true,
+    fullscreen: true
+  },
+  {
+    id: 'network-diagram-pro',
+    path: '/dashboard/apps/production/network-diagram-pro',
+    name: 'Network Diagram Pro',
+    hideSidebar: true,
+    fullscreen: true
+  }
+  // Add more applications here as needed
+];
+
+export const getApplicationByPath = (pathname) => {
+  return applicationRoutes.find(app => pathname.startsWith(app.path));
+};
+
+export default applicationRoutes;

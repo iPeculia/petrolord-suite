@@ -1,0 +1,1 @@
+<horizonsAction type="delete" />
