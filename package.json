@@ -1,3 +1,7 @@
+"scripts": {
+  "lint": "eslint .",
+  ...
+}
 {
   "name": "web-app",
   "type": "module",
