@@ -5,10 +5,10 @@ import { Download, FileText } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 // Import CSV files as static assets (returns URL string in Vite)
-import prodCsvUrl from '../../data/materialBalance/sampleData/sample_production_history.csv';
-import pressCsvUrl from '../../data/materialBalance/sampleData/sample_pressure_data.csv';
-import pvtCsvUrl from '../../data/materialBalance/sampleData/sample_pvt_data.csv';
-import contactCsvUrl from '../../data/materialBalance/sampleData/sample_contact_observations.csv';
+import prodCsvUrl from "../../data/materialBalance/sampleData/sample_production_history.csv?url";
+import pressCsvUrl from "../../data/materialBalance/sampleData/sample_pressure_data.csv?url";
+import pvtCsvUrl from "../../data/materialBalance/sampleData/sample_pvt_data.csv?url";
+import contactCsvUrl from "../../data/materialBalance/sampleData/sample_contact_observations.csv?url";
 
 const SampleFileButton = ({ label, fileUrl, filename }) => {
   return (
