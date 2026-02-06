@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-globals */
 
 // Douglas-Peucker algorithm for polyline simplification
 function simplify(points, tolerance) {
