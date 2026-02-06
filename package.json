@@ -22,7 +22,7 @@
     "deploy:phase4": "node scripts/deploy-earthmodel-phase4.js",
     "optimize:build": "node scripts/reduce-build-size.js && npm run build:fast",
     "preview": "vite preview --host :: --port 3000",
-    "lint": "eslint src --report-unused-disable-directives",
+    "lint": "eslint src --report-unused-disable-directives --max-warnings 9999",
     "lint:jsx": "node scripts/scan-jsx-warnings.js",
     "clean": "rm -rf dist node_modules/.vite",
     "clean:unused": "rm -rf dist .cache node_modules/.vite",

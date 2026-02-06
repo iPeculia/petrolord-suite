@@ -8,16 +8,13 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-// Public URLs for sample CSV files
-const PROD_CSV_URL =
-  "/sample-data/material-balance/sample_production_history.csv";
-const PRESSURE_CSV_URL =
-  "/sample-data/material-balance/sample_pressure_data.csv";
+// Use files from /public (Vite serves these as-is)
+const PROD_CSV_URL = "/sample-data/material-balance/sample_production_history.csv";
+const PRESSURE_CSV_URL = "/sample-data/material-balance/sample_pressure_data.csv";
 const PVT_CSV_URL = "/sample-data/material-balance/sample_pvt_data.csv";
-const CONTACTS_CSV_URL =
-  "/sample-data/material-balance/sample_contact_observations.csv";
+const CONTACTS_CSV_URL = "/sample-data/material-balance/sample_contact_observations.csv";
 
-const SampleFileButton = ({ label, fileUrl, filename }) => {
+function SampleFileButton({ label, fileUrl, filename }) {
   return (
     <TooltipProvider>
       <Tooltip>
@@ -41,9 +38,9 @@ const SampleFileButton = ({ label, fileUrl, filename }) => {
       </Tooltip>
     </TooltipProvider>
   );
-};
+}
 
-const SampleDataDownloader = () => {
+export default function SampleDataDownloader() {
   return (
     <div className="mt-4 pt-4 border-t border-slate-800/50">
       <div className="text-[10px] text-slate-500 font-semibold mb-2 flex items-center gap-2">
@@ -77,7 +74,4 @@ const SampleDataDownloader = () => {
       </div>
     </div>
   );
-};
-
-export default SampleDataDownloader;
-
+}
