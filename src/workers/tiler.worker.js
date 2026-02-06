@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-globals */
 
 self.onmessage = async (event) => {
     const { file, tileSize, signal } = event.data;

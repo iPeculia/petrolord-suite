@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-globals */
 import Papa from 'papaparse';
 
     const parseLAS = (text) => {
