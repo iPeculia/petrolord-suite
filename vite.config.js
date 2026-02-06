@@ -222,8 +222,8 @@ const addTransformIndexHtml = {
 
 console.warn = () => {};
 
-const logger = createLogger()
-const loggerError = logger.error
+const logger = createLogger();
+const loggerError = logger.error;
 
 logger.error = (msg, options) => {
 	if (options?.error?.toString().includes('CssSyntaxError: [postcss]')) {
@@ -231,7 +231,7 @@ logger.error = (msg, options) => {
 	}
 
 	loggerError(msg, options);
-}
+};
 
 export default defineConfig({
 	customLogger: logger,
@@ -248,9 +248,13 @@ export default defineConfig({
 		allowedHosts: true,
 	},
 	resolve: {
-		extensions: ['.jsx', '.js', '.tsx', '.ts', '.json', ],
+		extensions: ['.jsx', '.js', '.tsx', '.ts', '.json'],
 		alias: {
 			'@': path.resolve(__dirname, './src'),
+
+			// ✅ Drop-in replacement so you DON'T edit files importing 'xlsx'
+			// Make sure this file exists: src/utils/xlsxCompat.js
+			'xlsx': path.resolve(__dirname, './src/utils/xlsxCompat.js'),
 		},
 	},
 	build: {

@@ -62,7 +62,7 @@ export default defineConfig({
               return 'vendor-ui';
             }
             // Data Processing Vendor
-            if (id.includes('lodash') || id.includes('date-fns') || id.includes('papaparse') || id.includes('xlsx')) {
+            if (id.includes('lodash') || id.includes('date-fns') || id.includes('papaparse')) {
               return 'vendor-utils';
             }
             
