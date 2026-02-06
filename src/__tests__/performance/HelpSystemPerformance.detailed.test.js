@@ -18,9 +18,10 @@ describe('Performance: Help System', () => {
   test('Memory usage check', () => {
     // Safe check for process.memoryUsage which might not exist in browser/JSDOM
     const getMemoryUsage = () => {
-      // eslint-disable-next-line no-undef
+      
       if (typeof process !== 'undefined' && typeof process.memoryUsage === 'function') {
-        // eslint-disable-next-line no-undef
+        
+        
         return process.memoryUsage().heapUsed;
       }
       // Fallback for browser environments where performance.memory might exist (Chrome) or just return 0

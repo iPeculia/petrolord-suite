@@ -6,7 +6,7 @@ import { OrbitControls, Text, Line, Html, Stats, View, Edges, GizmoHelper, Gizmo
 import * as THREE from 'three';
 import { useStudio } from '@/contexts/StudioContext';
 import { supabase } from '@/lib/customSupabaseClient';
-import { Loader2, Grid, Scissors, Download, Ghost, Layers, Lightbulb, Ruler, Eye, Video, Palette, MousePointer2, Camera, Box, Monitor, Move3d, Maximize, Focus, FileOutput, Image as ImageIcon, Save, Settings } from 'lucide-react';
+import { Loader2, Grid, Scissors, Download, Ghost, Layers, Lightbulb, Ruler, Eye, Video, Palette, MousePointer2, Camera, Box, Monitor, Move3d, Maximize, Focus, FileOutput, Image as ImageIcon, Save, Settings , PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
@@ -16,7 +16,6 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Card } from "@/components/ui/card";
-import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 
 // =================================================================
